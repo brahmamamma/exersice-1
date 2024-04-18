@@ -1,0 +1,45 @@
+name: test-lint-deploy-workflow
+on: push
+jobs:
+    test:
+        name: job-test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-node@v4
+              with:
+                node-version: 18
+            - run: npm ci
+            - run: npm test
+    lint:
+        needs: test
+        name: job-lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout to source code
+              uses: actions/checkout@v4
+            - name: set up node-js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 18
+            - name: Install Node.js dependencies
+              run: npm ci
+            - name: Run Listeners
+              uses: wearerequired/lint-action@v2
+    deploy:
+        needs: lint
+        name: job-deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout to source code
+              uses: actions/checkout@v4
+            - name: set up node-js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 18
+            - name: Install Node.js dependencies
+              run: npm ci
+            - name: Run deploy
+              run:  npm build
+            - name: output-metadata
+              run: echo ${{ github }}
