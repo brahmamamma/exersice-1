@@ -1,5 +1,13 @@
 name: test-lint-deploy-workflow
-on: push
+on: 
+    pull_request:
+        types:
+            - opened
+    workflow_dispatch:
+    push:
+        branches:
+            - master
+            
 jobs:
     test:
         name: job-test
