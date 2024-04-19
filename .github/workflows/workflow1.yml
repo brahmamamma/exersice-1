@@ -44,4 +44,4 @@ jobs:
             - name: Run deploy
               run:  echo "Deploying"
             - name: output-metadata
-              run: echo ${{ github }}
+              run: echo "${{ toJson(github) }}"
